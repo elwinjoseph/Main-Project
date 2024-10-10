@@ -18,6 +18,15 @@ class ScreenCategoryState extends State<ScreenCategory> {
 
   String selectedCategory = 'All Products';
 
+  // List of categories
+  final List<Map<String, String>> categories = [
+    {'label': 'Mens Clothing', 'value': 'men\'s clothing'},
+    {'label': 'Womens Clothing', 'value': 'women\'s clothing'},
+    {'label': 'Jewelry', 'value': 'jewelery'},
+    {'label': 'Electronics', 'value': 'electronics'},
+    {'label': 'All Products', 'value': 'All Products'},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +43,9 @@ class ScreenCategoryState extends State<ScreenCategory> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         actions: [
           IconButton(
@@ -52,15 +63,14 @@ class ScreenCategoryState extends State<ScreenCategory> {
             child: Container(
               height: 60,
               padding: const EdgeInsets.all(8),
-              child: ListView(
+              child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                children: [
-                  _buildCategoryChip('Mens Clothing', 'men\'s clothing'),
-                  _buildCategoryChip('Womens Clothing', 'women\'s clothing'),
-                  _buildCategoryChip('Jewelry', 'jewelery'),
-                  _buildCategoryChip('Electronics', 'electronics'),
-                  _buildCategoryChip('All Products', 'All Products'),
-                ],
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  String label = categories[index]['label']!;
+                  String category = categories[index]['value']!;
+                  return _buildCustomCategoryChip(label, category);
+                },
               ),
             ),
           ),
@@ -74,7 +84,8 @@ class ScreenCategoryState extends State<ScreenCategory> {
               if (selectedCategory != 'All Products') {
                 filteredProducts = shopController.products
                     .where((product) =>
-                        product.category == selectedCategory.toLowerCase())
+                        product.category.toLowerCase() ==
+                        selectedCategory.toLowerCase())
                     .toList();
               }
 
@@ -172,24 +183,42 @@ class ScreenCategoryState extends State<ScreenCategory> {
     );
   }
 
-  Widget _buildCategoryChip(String label, String category) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: ChoiceChip(
-        label: Text(
-          label,
-          style: TextStyle(
-            color: selectedCategory == category ? Colors.white70 : Colors.black,
+  // Custom category chip with better design
+  Widget _buildCustomCategoryChip(String label, String category) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedCategory = category;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: selectedCategory == category ? Colors.black : Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.black.withOpacity(0.2),
+              width: 1,
+            ),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          child: Row(
+            children: [
+              // You can add icons before the label if needed
+              // Icon(Icons.category, color: selectedCategory == category ? Colors.white : Colors.black),
+              Text(
+                label,
+                style: TextStyle(
+                  color: selectedCategory == category
+                      ? Colors.white
+                      : Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
-        selected: selectedCategory == category,
-        backgroundColor: Colors.white70,
-        selectedColor: Colors.black,
-        onSelected: (selected) {
-          setState(() {
-            selectedCategory = category;
-          });
-        },
       ),
     );
   }
