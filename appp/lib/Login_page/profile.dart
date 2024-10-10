@@ -16,13 +16,7 @@ class ProfileScreen extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
-          onPressed: () {
-            ();
-          },
-        ),
+        leading: Container(),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -35,8 +29,7 @@ class ProfileScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Profile Header Section
-          Container(
-            color: Colors.black12,
+          SizedBox(
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.all(19.0),

@@ -40,13 +40,7 @@ class ScreenCategoryState extends State<ScreenCategory> {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        leading: Container(),
         actions: [
           IconButton(
               onPressed: () {},
